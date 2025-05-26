@@ -3,7 +3,7 @@
     <!-- fundo escuro opcional -->
     <div
       v-if="isOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 z-40"
+      class="fixed inset-0 bg- bg-opacity-50 z-40"
       @click.self="closeCart"
     ></div>
   

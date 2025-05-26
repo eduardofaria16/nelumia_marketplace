@@ -7,10 +7,17 @@ const produto = {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center p-6">
-    <h1 class="text-2xl font-bold mb-6 text-center">Produtos em destaque</h1>
+  <div
+    class="flex flex-col items-center justify-center p-6"
+    style="background: linear-gradient(to bottom, #267b7d, #ffffff);"
+  >
+    <h1 class="text-2xl font-bold mb-6 text-center text-white drop-shadow-sm">
+      Produtos em destaque
+    </h1>
 
-    <div class="w-72 rounded-2xl border-4 border-primary shadow-xl overflow-hidden bg-white">
+    <div
+      class="w-72 rounded-2xl border-4 border-[#267b7d] shadow-xl overflow-hidden bg-white"
+    >
       <img
         :src="produto.imagem"
         alt="Produto em destaque"

@@ -1,60 +1,104 @@
 <script setup lang="ts">
 import { ShoppingBag, User, Menu } from 'lucide-vue-next';
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import Cart from './Cart.vue';
+import UserComponent from './User.vue';
+import { usePage } from '@inertiajs/vue3';
+
 
 const cartRef = ref();
-
 function openCart() {
   cartRef.value?.openCart();
 }
 
+const userRef = ref();
+function openUserDialog() {
+  const isAuthenticated = usePage().props.auth?.user;
+  if (isAuthenticated) {
+    userRef.value?.openAuthDialog();
+  } else {
+    console.log(isAuthenticated);
+    userRef.value?.openPopover();
+  }
+}
+
 const isMobileMenuOpen = ref(false);
+
+// Controla se o usuário rolou a página
+const isScrolled = ref(false);
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 10;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
-  <header class="w-full px-4 py-3 shadow-md bg-white relative">
-    <div class="flex items-center justify-between">
-      <!-- Botão menu hambúrguer (mostrado apenas no mobile) -->
+  <header
+    :class="[
+      'w-full px-6 transition-all duration-300 fixed top-0 left-0 z-50 bg-white shadow-md',
+      isScrolled ? 'py-2' : 'py-3'
+    ]"
+    
+  >
+    <div class="flex items-start justify-between w-full mx-auto max-w-7xl">
+      <!-- Botão hambúrguer (mobile) -->
       <button
-        class="lg:hidden text-black"
+        class="lg:hidden text-[#267b7d] hover:text-[#f2663b] transition duration-200"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
         <Menu class="w-6 h-6" />
       </button>
 
-      <!-- Nome da marca (centralizado no mobile) -->
-      <div class="text-2xl font-bold text-black absolute left-1/2 transform -translate-x-1/2 lg:static lg:translate-x-20">
+      <!-- Logo -->
+      <div class="text-2xl font-bold text-[#267b7d]">
         Nelumia
       </div>
-      
-    <!-- Menu navegação -->
-    <nav
-        class="flex-col text-gray-700 font-medium gap-4 lg:gap-6 lg:flex-row lg:items-center lg:justify-center"
-        :class="{
-        'flex mt-4': isMobileMenuOpen,
-        'hidden': !isMobileMenuOpen,
-        'lg:flex': true,
-        'lg:mt-0': true
-    }"
-    >
 
-      <a href="#" class="hover:text-primary transition">Sobre nós</a>
-      <a href="#" class="hover:text-primary transition">Home</a>
-      <a href="#products-container" class="hover:text-primary transition">Produtos</a>
-    </nav>
-      <!-- Ícones (mantém na direita em todas as telas) -->
-      <div class="flex items-center gap-4 text-black">
+      <!-- Menu (desktop) -->
+      <nav class="hidden lg:flex justify-center gap-6 mt-4 text-[#267b7d] font-medium">
+        <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
+        <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
+      </nav>
+
+      <!-- Ícones -->
+      <div class="flex items-center gap-4 text-[#267b7d] lg:right-6">
         <ShoppingBag
-        class="w-6 h-6 cursor-pointer hover:text-primary text-black transition"
-        @click="openCart"
+          class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200"
+          @click="openCart"
         />
-        <User class="w-6 h-6 cursor-pointer hover:text-primary transition" />
+        <UserComponent ref="userRef">
+        <template #trigger>
+          <User 
+            class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200" 
+            @click="openUserDialog"
+          />
+        </template>
+      </UserComponent>
+
       </div>
-      
     </div>
 
+    <!-- Menu (mobile) -->
+    <nav
+      class="flex-col text-[#267b7d] font-medium gap-4 lg:hidden transition-all duration-300"
+      :class="{
+        'flex mt-4': isMobileMenuOpen,
+        'hidden': !isMobileMenuOpen
+      }"
+    >
+      <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
+      <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
+    </nav>
+
     <Cart ref="cartRef" />
+    <!-- <UserComponent ref="userRef" /> -->
   </header>
 </template>

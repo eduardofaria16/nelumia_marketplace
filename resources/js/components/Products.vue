@@ -22,7 +22,7 @@
 
           <!-- Botão que aparece no hover -->
           <button
-            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-primary text-white text-sm px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-primary text-white text-sm px-4 py-2 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           >
             Adicionar ao carrinho
           </button>

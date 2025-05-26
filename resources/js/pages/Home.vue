@@ -5,6 +5,7 @@
     import Products from '../components/Products.vue'
     import Cart from '../components/Cart.vue'
     import About from '@/components/About.vue'
+    import Form from '@/components/Form.vue'
     import Footer from '../components/Footer.vue'
 </script>
 
@@ -16,6 +17,7 @@
     <Products />
     <Cart />
     <About />
+    <Form />
     <Footer />
   </template>
 
