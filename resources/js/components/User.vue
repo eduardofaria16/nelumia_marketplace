@@ -71,7 +71,7 @@
                 </slot>
             </Button>
         </PopoverTrigger>
-        <PopoverContent class="w-64 p-4" align="end">
+        <PopoverContent class="w-64 p-4 bg-white border-none" align="end">
             <div class="space-y-3">
                 <div class="text-sm">
                     <p class="font-medium text-gray-900">{{ userInfo?.name || 'Usuário' }}</p>

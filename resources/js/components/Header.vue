@@ -6,15 +6,12 @@ import UserComponent from './User.vue';
 import { usePage } from '@inertiajs/vue3';
 
 
-const cartRef = ref();
-function openCart() {
-  cartRef.value?.openCart();
-}
+
 
 const userRef = ref();
 function openUserDialog() {
   const isAuthenticated = usePage().props.auth?.user;
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     userRef.value?.openAuthDialog();
   } else {
     console.log(isAuthenticated);
@@ -65,22 +62,19 @@ onUnmounted(() => {
         <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
         <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
         <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Rotina</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Cuidados</a>
       </nav>
+
 
       <!-- Ícones -->
       <div class="flex items-center gap-4 text-[#267b7d] lg:right-6">
-        <ShoppingBag
-          class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200"
-          @click="openCart"
+        <Cart />
+        <UserComponent ref="userRef" />
+        <User 
+              class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200" 
+              @click="openUserDialog"
         />
-        <UserComponent ref="userRef">
-        <template #trigger>
-          <User 
-            class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200" 
-            @click="openUserDialog"
-          />
-        </template>
-      </UserComponent>
 
       </div>
     </div>
@@ -96,9 +90,11 @@ onUnmounted(() => {
       <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
       <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
       <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Rotina</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Cuidados</a>
     </nav>
 
-    <Cart ref="cartRef" />
+    <!-- <Cart ref="cartRef" /> -->
     <!-- <UserComponent ref="userRef" /> -->
   </header>
 </template>
