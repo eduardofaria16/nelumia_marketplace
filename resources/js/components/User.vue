@@ -1,3 +1,119 @@
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useForm, Link, router } from '@inertiajs/vue3';
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { LoaderCircle } from 'lucide-vue-next';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
+// Props para receber informações do usuário
+interface Props {
+    userInfo?: {
+        name: string;
+        email: string;
+        [key: string]: any;
+    };
+}
+
+const props = defineProps<Props>();
+
+const isDialogOpen = ref(false);
+const isPopoverOpen = ref(false);
+
+const isRegister = ref(false);
+
+const form = useForm({
+    email: '',
+    password: '',
+    remember: false,
+});
+
+const registerForm = useForm({
+    email: '',
+    password: '',
+    password_confirmation: '',
+});
+
+const openAuthDialog = () => {
+    isDialogOpen.value = true;
+    isRegister.value = false;
+    form.clearErrors();
+    registerForm.clearErrors();
+};
+
+const openPopover = () => {
+    isPopoverOpen.value = true;
+};
+
+const closeAuthDialog = () => {
+    isDialogOpen.value = false;
+    form.reset();
+    form.clearErrors();
+    registerForm.reset();
+    registerForm.clearErrors();
+    isRegister.value = false;
+};
+
+const login = () => {
+    form.post('/login', {
+        onSuccess: () => {
+            closeAuthDialog();
+        },
+        onError: () => {
+            // Os erros serão automaticamente mostrados no formulário
+        }
+    });
+};
+
+const register = () => {
+    registerForm.post('/register', {
+        onSuccess: () => {
+            closeAuthDialog();
+        },
+        onError: () => {
+            // Os erros serão automaticamente mostrados no formulário
+        }
+    });
+};
+
+const logout = () => {
+    router.post('/logout', {}, {
+        onSuccess: () => {
+            isPopoverOpen.value = false;
+        }
+    });
+};
+
+const goToProfile = () => {
+    router.visit('/profile');
+    isPopoverOpen.value = false;
+};
+
+const goToSettings = () => {
+    router.visit('/settings');
+    isPopoverOpen.value = false;
+};
+
+// Expõe as funções para o componente pai
+defineExpose({
+    openAuthDialog,
+    openPopover,
+});
+</script>
 <template> 
     <!-- Dialog de Login/Registro -->
     <Dialog v-model:open="isDialogOpen">
@@ -135,119 +251,3 @@
         </PopoverContent>
     </Popover>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import { useForm, Link, router } from '@inertiajs/vue3';
-import { 
-    Dialog, 
-    DialogContent, 
-    DialogHeader,
-    DialogTitle,
-    DialogFooter
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { LoaderCircle } from 'lucide-vue-next';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
-// Props para receber informações do usuário
-interface Props {
-    userInfo?: {
-        name: string;
-        email: string;
-        [key: string]: any;
-    };
-}
-
-const props = defineProps<Props>();
-
-const isDialogOpen = ref(false);
-const isPopoverOpen = ref(false);
-
-const isRegister = ref(false);
-
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const registerForm = useForm({
-    email: '',
-    password: '',
-    password_confirmation: '',
-});
-
-const openAuthDialog = () => {
-    isDialogOpen.value = true;
-    isRegister.value = false;
-    form.clearErrors();
-    registerForm.clearErrors();
-};
-
-const openPopover = () => {
-    isPopoverOpen.value = true;
-};
-
-const closeAuthDialog = () => {
-    isDialogOpen.value = false;
-    form.reset();
-    form.clearErrors();
-    registerForm.reset();
-    registerForm.clearErrors();
-    isRegister.value = false;
-};
-
-const login = () => {
-    form.post('/login', {
-        onSuccess: () => {
-            closeAuthDialog();
-        },
-        onError: () => {
-            // Os erros serão automaticamente mostrados no formulário
-        }
-    });
-};
-
-const register = () => {
-    registerForm.post('/register', {
-        onSuccess: () => {
-            closeAuthDialog();
-        },
-        onError: () => {
-            // Os erros serão automaticamente mostrados no formulário
-        }
-    });
-};
-
-const logout = () => {
-    router.post('/logout', {}, {
-        onSuccess: () => {
-            isPopoverOpen.value = false;
-        }
-    });
-};
-
-const goToProfile = () => {
-    router.visit('/profile');
-    isPopoverOpen.value = false;
-};
-
-const goToSettings = () => {
-    router.visit('/settings');
-    isPopoverOpen.value = false;
-};
-
-// Expõe as funções para o componente pai
-defineExpose({
-    openAuthDialog,
-    openPopover,
-});
-</script>

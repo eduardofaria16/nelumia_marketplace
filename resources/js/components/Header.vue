@@ -38,7 +38,7 @@ onUnmounted(() => {
 <template>
   <header
     :class="[
-      'w-full px-6 transition-all duration-300 fixed top-8 left-0 z-50 bg-white shadow-sm border-b border-[#267b7d]/10',
+      'w-full px-6 transition-all duration-300 fixed top-10 left-0 z-50 bg-white shadow-sm border-b border-[#267b7d]/10',
       isScrolled ? 'py-2' : 'py-3'
     ]"
     
@@ -59,11 +59,11 @@ onUnmounted(() => {
 
       <!-- Menu (desktop) -->
       <nav class="hidden lg:flex items-center gap-8 text-[#267b7d] font-medium">
-        <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
-        <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Cuidados</a>
+        <a href="#" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Sobre nós</a>
+        <a href="#" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Home</a>
+        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Produtos</a>
+        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Rotina</a>
+        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Cuidados</a>
       </nav>
 
 
