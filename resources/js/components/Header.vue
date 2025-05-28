@@ -11,7 +11,7 @@ import { usePage } from '@inertiajs/vue3';
 const userRef = ref();
 function openUserDialog() {
   const isAuthenticated = usePage().props.auth?.user;
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     userRef.value?.openAuthDialog();
   } else {
     console.log(isAuthenticated);
@@ -38,42 +38,42 @@ onUnmounted(() => {
 <template>
   <header
     :class="[
-      'w-full px-6 transition-all duration-300 fixed top-0 left-0 z-50 bg-white shadow-md',
+      'w-full px-6 transition-all duration-300 fixed top-8 left-0 z-50 bg-white shadow-sm border-b border-[#267b7d]/10',
       isScrolled ? 'py-2' : 'py-3'
     ]"
     
   >
-    <div class="flex items-start justify-between w-full mx-auto max-w-7xl">
+    <div class="flex items-center justify-between w-full mx-auto max-w-7xl">
       <!-- Botão hambúrguer (mobile) -->
       <button
         class="lg:hidden text-[#267b7d] hover:text-[#f2663b] transition duration-200"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
-        <Menu class="w-6 h-6" />
+        <Menu class="w-7 h-7" />
       </button>
 
       <!-- Logo -->
-      <div class="text-2xl font-bold text-[#267b7d]">
-        Nelumia
+      <div class="text-3xl font-extrabold tracking-wide text-[#267b7d] select-none">
+        NELUMIA
       </div>
 
       <!-- Menu (desktop) -->
-      <nav class="hidden lg:flex justify-center gap-6 mt-4 text-[#267b7d] font-medium">
-        <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
-        <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Rotina</a>
-        <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Cuidados</a>
+      <nav class="hidden lg:flex items-center gap-8 text-[#267b7d] font-medium">
+        <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
+        <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
+        <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Cuidados</a>
       </nav>
 
 
       <!-- Ícones -->
-      <div class="flex items-center gap-4 text-[#267b7d] lg:right-6">
+      <div class="flex items-center gap-4 text-[#267b7d]">
         <Cart />
         <UserComponent ref="userRef" />
         <User 
-              class="w-6 h-6 cursor-pointer hover:text-[#f2663b] transition duration-200" 
-              @click="openUserDialog"
+          class="w-7 h-7 cursor-pointer hover:bg-[#267b7d]/10 rounded-full p-1 transition"
+          @click="openUserDialog"
         />
 
       </div>
@@ -81,17 +81,17 @@ onUnmounted(() => {
 
     <!-- Menu (mobile) -->
     <nav
-      class="flex-col text-[#267b7d] font-medium gap-4 lg:hidden transition-all duration-300"
+      class="flex-col text-[#267b7d] font-medium gap-6 lg:hidden transition-all duration-300 bg-white shadow-md rounded-xl mt-2 px-4 py-4"
       :class="{
-        'flex mt-4': isMobileMenuOpen,
+        'flex': isMobileMenuOpen,
         'hidden': !isMobileMenuOpen
       }"
     >
-      <a href="#" class="hover:text-[#f2663b] transition duration-200">Sobre nós</a>
-      <a href="#" class="hover:text-[#f2663b] transition duration-200">Home</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Produtos</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Rotina</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition duration-200">Cuidados</a>
+      <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
+      <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
+      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Cuidados</a>
     </nav>
 
     <!-- <Cart ref="cartRef" /> -->

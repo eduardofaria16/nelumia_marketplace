@@ -7,18 +7,27 @@
     import About from '@/components/About.vue'
     import Form from '@/components/Form.vue'
     import Footer from '../components/Footer.vue'
+    import Marquee from '@/components/Marquee.vue'
+    import HeroImage from '@/components/HeroImage.vue'
+    import KitDestaque from '@/components/KitDestaque.vue'
+    import ProductCarousel from '@/components/ProductCarousel.vue'
+    import LeadForm from '@/components/LeadForm.vue'
+    import InstagramFeed from '@/components/InstagramFeed.vue'
 </script>
 
 
 <template>
+    <Marquee />
     <Header />
-    <Banner />
-    <ProductsDestaque />
-    <Products />
-    <Cart />
-    <About />
-    <Form />
-    <Footer />
-  </template>
+    <div class="pt-[88px]">
+        <HeroImage />
+        <KitDestaque />
+        <ProductCarousel />
+        <About />
+        <LeadForm />
+        <InstagramFeed />
+        <Footer />
+    </div>
+</template>
 
   
