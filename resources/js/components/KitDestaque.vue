@@ -10,7 +10,7 @@
         <h2 class="text-2xl md:text-3xl font-bold text-[#267b7d] mb-2">KIT NELUMIA</h2>
         <p class="text-base text-[#267b7d] mb-4">O combo perfeito para sua rotina de autocuidado. Produtos exclusivos para realçar sua beleza natural.</p>
         <span class="text-2xl font-bold text-[#f2663b] mb-4">R$ 297,00</span>
-        <button class="bg-[#267b7d] hover:bg-[#f2663b] text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 shadow-md">
+        <button @click="addToCart" class="bg-[#267b7d] hover:bg-[#f2663b] text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 shadow-md">
           Comprar agora
         </button>
       </div>
@@ -19,5 +19,16 @@
 </template>
 
 <script setup lang="ts">
-// Dados mockados, sem lógica por enquanto
+import { useCartStore } from '@/stores/cart'
+
+const cart = useCartStore()
+
+function addToCart() {
+  cart.addToCart({
+    id: 3,
+    name: 'Kit Nelumia',
+    price: 297.0,
+    image: 'https://via.placeholder.com/80x80.png?text=Kit+Nelumia',
+  })
+}
 </script> 

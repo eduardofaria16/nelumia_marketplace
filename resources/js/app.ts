@@ -4,6 +4,8 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
+import { createPinia } from 'pinia'
+
 
 
 // FontAwesome
@@ -25,6 +27,8 @@ declare module 'vite/client' {
     }
 }
 
+const pinia = createPinia()
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -36,6 +40,7 @@ createInertiaApp({
        
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(pinia)
             .mount(el);
     },
     progress: {
