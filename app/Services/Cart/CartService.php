@@ -47,4 +47,14 @@ class CartService implements CartInterface
 
         return response()->json(['message' => 'Erro ao adicionar produto ao carrinho']);
     }
+
+    public function updateCart(Request $request, $id): JsonResponse
+    {
+        return $this->cartRepository->updateCart($request, $id);
+    }
+
+    public function deleteCart($id): JsonResponse
+    {
+        return $this->cartRepository->deleteCart($id);
+    }
 }

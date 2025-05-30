@@ -19,4 +19,16 @@ class CartController extends Controller
         
         return $this->cartService->createCart($request);
     }   
+    
+
+    public function update(Request $request, $id): JsonResponse
+    {
+        return $this->cartService->updateCart($request, $id);
+    }
+
+
+    public function destroy($id): JsonResponse
+    {
+        return $this->cartService->deleteCart($id);
+    }
 }

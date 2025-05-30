@@ -12,6 +12,9 @@ import { useCartStore } from '@/stores/cart'
 
 const cart = useCartStore();
 
+const finishOrder = () => {
+  cart.finishOrder()
+};
 
 </script>
 
@@ -89,7 +92,7 @@ const cart = useCartStore();
           <span>Subtotal</span>
           <span>R$ {{ cart.subtotal.toFixed(2) }}</span>
         </div>
-        <button class="bg-[#267b7d] hover:bg-[#f2663b] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 shadow-md w-full">
+        <button @click="finishOrder" class="bg-[#267b7d] hover:bg-[#f2663b] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 shadow-md w-full">
           Finalizar compra
         </button>
       </div>

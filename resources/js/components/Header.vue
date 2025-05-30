@@ -4,9 +4,9 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import Cart from './Cart.vue';
 import UserComponent from './User.vue';
 import { usePage } from '@inertiajs/vue3';
+import { useCartStore } from '@/stores/cart';
 
-
-
+const cart = useCartStore();
 
 const userRef = ref();
 function openUserDialog() {
@@ -29,6 +29,7 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  cart.getCart();
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
