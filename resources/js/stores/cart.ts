@@ -109,7 +109,7 @@ export const useCartStore = defineStore('cart', {
         })
 
       } else {
-        console.log(this.items.map((item) => item.id));
+        console.log(this.items);
       } 
     }
   },
