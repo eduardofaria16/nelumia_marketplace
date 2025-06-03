@@ -1,77 +1,49 @@
 <template>
-  <header class="fixed top-0 w-full bg-[#267b7d] backdrop-blur-md z-50 py-2">
-    <div class="w-full flex justify-between items-end">
-
-      <div class="ticker-wrapper overflow-hidden w-full mx-auto">
-        <div class="ticker-move">
-          <div class="ticker-content text-white font-medium flex whitespace-nowrap">
-            <template v-for="n in 5" :key="n">
-              <span class="ticker-item">Workshop Hands On</span>
-              <span class="ticker-separator">✦</span>
-              <span class="ticker-item">{{ formattedDate }} - Restam {{ remainingSlots }} vagas</span>
-              <span class="ticker-separator">✦</span>
-              <span class="ticker-item">Última Chamada</span>
-              <span class="ticker-separator">✦</span>
-            </template>
-          </div>
-        </div>
+  <header class="fixed top-0 w-full bg-[#267b7d] z-50 py-2">
+    <div class="w-full flex justify-center items-center">
+      <div class="relative overflow-hidden h-6">
+        <transition name="fade" mode="out-in">
+          <span :key="currentIndex" class="text-white font-medium text-sm">
+            {{ messages[currentIndex] }}
+          </span>
+        </transition>
       </div>
     </div>
   </header>
 </template>
 
+
+
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+const messages = [
+  'FRETE GRÁTIS | Compras acima de R$297',
+  'CRUELTY FREE | Não testado em animais',
+  'SITE SEGURO | Seus dados protegidos'
+];
 
-const eventDate = new Date('2025-07-27'); // Exemplo: 15 de julho de 2024
+const currentIndex = ref(0);
+let intervalId;
 
-// Número de vagas restantes
-const remainingSlots = ref(2);
+onMounted(() => {
+  intervalId = setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % messages.length;
+  }, 4000); // Troca a cada 3 segundos
+});
 
-// Formatar a data
-const formattedDate = computed(() => {
-  const options = { day: 'numeric', month: 'numeric' };
-  return eventDate.toLocaleDateString('pt-BR', options);
+onBeforeUnmount(() => {
+  clearInterval(intervalId);
 });
 </script>
 
 <style scoped>
-.ticker-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100vw;
-  max-width: 100vw;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
 }
-
-.ticker-move {
-  display: inline-block;
-  white-space: nowrap;
-  will-change: transform;
-  animation: ticker 40s linear infinite;
-}
-
-.ticker-content {
-  display: inline-flex;
-}
-
-.ticker-item {
-  display: inline-block;
-  color: #020202;
-  font-weight: 900;
-}
-
-.ticker-separator {
-  display: inline-block;
-  margin: 0 0.5rem;
-}
-
-@keyframes ticker {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
+

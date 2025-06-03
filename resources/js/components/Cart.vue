@@ -6,11 +6,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { ShoppingBag } from 'lucide-vue-next'
 import { useCartStore } from '@/stores/cart'
+import { usePage } from '@inertiajs/vue3'
 
 const cart = useCartStore();
+const isAuthenticated = usePage().props.auth?.user;
 
 const finishOrder = () => {
   cart.finishOrder()
@@ -60,14 +62,15 @@ const finishOrder = () => {
               <div class="text-sm text-[#267b7d]/80 flex items-center gap-2">
                 <button
                   class="px-2 py-1 bg-[#267b7d] text-white rounded disabled:opacity-50"
-                  @click="cart.decreaseQuantity(item.id)"
+                  @click="cart.decreaseQuantity(isAuthenticated ? item.product_id : item.id, item.quantity)"
                   :disabled="item.quantity === 1"
                   aria-label="Diminuir quantidade"
                 >-</button>
                 <span>{{ item.quantity }}</span>
                 <button
                   class="px-2 py-1 bg-[#267b7d] text-white rounded"
-                  @click="cart.increaseQuantity(item.id)"
+                  @click="cart.increaseQuantity(isAuthenticated ? item.product_id : item.id, item.quantity)"
+                
                   aria-label="Aumentar quantidade"
                 >+</button>
               </div>
@@ -75,12 +78,12 @@ const finishOrder = () => {
             <div class="font-bold text-[#f2663b] flex items-center gap-2">
               R$ {{ (item.price * item.quantity).toFixed(2) }}
               <button
-                @click="cart.removeItem(item.id)"
+                @click="cart.removeItem(isAuthenticated ? item.product_id : item.id)"
                 class="ml-2 text-[#f2663b] hover:text-red-600 transition"
                 aria-label="Remover item"
                 title="Remover item"
-              >
-                &times;
+                >
+                  &times;
               </button>
             </div>
           </div>

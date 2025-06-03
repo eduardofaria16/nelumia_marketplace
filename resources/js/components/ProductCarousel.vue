@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full py-10 bg-white">
+  <section class="w-full py-10 bg-white" id="produtos">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-2xl md:text-3xl font-bold text-[#267b7d] mb-6 text-center">Produtos em Destaque</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -30,37 +30,37 @@ const cart = useCartStore()
 
 const products = [
   {
-    id: 1,
+    id: 2,
     name: 'Sabonete Facial',
     price: 59.9,
     image: 'https://via.placeholder.com/150x150.png?text=Sabonete',
   },
   {
-    id: 2,
+    id: 3,
     name: 'Sérum Vitamina C',
     price: 89.9,
     image: 'https://via.placeholder.com/150x150.png?text=Serum',
   },
   {
-    id: 3,
+    id: 4,
     name: 'Hidratante',
     price: 79.9,
     image: 'https://via.placeholder.com/150x150.png?text=Hidratante',
   },
   {
-    id: 4,
+    id: 5,
     name: 'Protetor Solar',
     price: 69.9,
     image: 'https://via.placeholder.com/150x150.png?text=Protetor',
   },
   {
-    id: 5,
+    id: 6,
     name: 'Tônico Facial',
     price: 49.9,
     image: 'https://via.placeholder.com/150x150.png?text=Tônico',
   },
   {
-    id: 6,
+    id: 7,
     name: 'Máscara Facial',
     price: 39.9,
     image: 'https://via.placeholder.com/150x150.png?text=Máscara',

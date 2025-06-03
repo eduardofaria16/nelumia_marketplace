@@ -19,6 +19,11 @@ class CartController extends Controller
         
         return $this->cartService->createCart($request);
     }   
+
+    public function index(): JsonResponse
+    {
+        return $this->cartService->index();
+    }
     
 
     public function update(Request $request, $id): JsonResponse

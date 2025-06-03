@@ -21,40 +21,82 @@ class CartService implements CartInterface
     public function createCart(Request $request): JsonResponse{
 
         $user = auth()->user();
-
-        $cartExists = Cart::where('user_id', $user->getAuthIdentifier())->where('product_id', $request->product_id)->first();
-
-        if($cartExists){
-            $cartExists->update([
-                'quantity' => $cartExists->quantity + 1,
-            ]);
-            return response()->json(['message' => 'Produto adicionado ao carrinho']);
-        }
-
+        
         $cart =[
-            // 'user_id' => $user->id,
+            'user_id' => $user->id,
             'product_id' => $request->product_id,
             'price' => $request->price,
             'name' => $request->name,
             'quantity' => 1,
         ];
-        
-        $createCart = $this->cartRepository->createCart($cart);
 
-        if($createCart){
+        $cartExists = Cart::where('user_id', $user->getAuthIdentifier())->first();
+
+        if($cartExists){
+            $cartExists->products()->attach($cart['product_id'], [
+                'quantity' => $cart['quantity'],
+                'price' => $cart['price'],
+                'name' => $cart['name'],
+            ]);
+
+            return response()->json(['message' => 'Produto adicionado ao carrinho']);
+        }else{
+            $createCart = $this->cartRepository->createCart($cart);
+            $createCart->products()->attach($cart['product_id'], [
+                'quantity' => $cart['quantity'],
+                'price' => $cart['price'],
+                'name' => $cart['name'],
+            ]);
             return response()->json(['message' => 'Produto adicionado ao carrinho']);
         }
+
+
 
         return response()->json(['message' => 'Erro ao adicionar produto ao carrinho']);
     }
 
+    public function index(): JsonResponse
+    {
+        $user = auth()->user();
+        $pivotItems = [];
+        $cart = Cart::where('user_id', $user->id)->with('products')->first();
+
+        if ($cart) {
+            foreach ($cart->products as $product) {
+                $pivotItems[] = $product->pivot; // acessa os dados da tabela pivô
+            }
+        }
+        
+        return response()->json($pivotItems);
+    }
+
     public function updateCart(Request $request, $id): JsonResponse
     {
-        return $this->cartRepository->updateCart($request, $id);
+        $user = auth()->user();
+        $cart = Cart::where('user_id', $user->id)->with('products')->first();
+
+        $quantity = $request->quantity;
+        $product_id = $request->id;
+
+        
+        if ($quantity <= 0) {
+            
+            $cart->products()->detach($product_id);
+        } else {
+            
+            $cart->products()->updateExistingPivot($product_id, [
+                'quantity' => $quantity,
+            ]);
+        }
+        return response()->json(['message' => 'Produto atualizado com sucesso']);
     }
 
     public function deleteCart($id): JsonResponse
-    {
-        return $this->cartRepository->deleteCart($id);
+    {   
+        $user = auth()->user();
+        $cart = Cart::where('user_id', $user->id)->with('products')->first();
+        $cart->products()->detach($id);
+        
+        return response()->json(['message' => 'Produto removido do carrinho']);
     }
 }

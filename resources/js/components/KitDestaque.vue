@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full bg-white py-10 flex justify-center">
+  <section class="w-full bg-white py-10 flex justify-center" i ="kit-destaque">
     <div class="flex flex-col md:flex-row items-center gap-10 max-w-5xl w-full shadow-lg rounded-xl p-6 border border-[#267b7d]">
       <img
         src="https://via.placeholder.com/400x400.png?text=Kit+Nelumia"
@@ -25,7 +25,7 @@ const cart = useCartStore()
 
 function addToCart() {
   cart.addToCart({
-    id: 3,
+    id: 1,
     name: 'Kit Nelumia',
     price: 297.0,
     image: 'https://via.placeholder.com/80x80.png?text=Kit+Nelumia',

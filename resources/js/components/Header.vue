@@ -11,13 +11,18 @@ const cart = useCartStore();
 const userRef = ref();
 function openUserDialog() {
   const isAuthenticated = usePage().props.auth?.user;
-  if (isAuthenticated) {
+
+  if (!isAuthenticated) {
     userRef.value?.openAuthDialog();
   } else {
-    console.log(isAuthenticated);
-    userRef.value?.openPopover();
+    console.log(isAuthenticated.name);
+    userRef.value?.openPopover(isAuthenticated.name);
+
   }
 }
+onMounted(() => {
+  cart.getCart();
+});
 
 const isMobileMenuOpen = ref(false);
 
@@ -29,7 +34,6 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
-  cart.getCart();
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
@@ -60,11 +64,11 @@ onUnmounted(() => {
 
       <!-- Menu (desktop) -->
       <nav class="hidden lg:flex items-center gap-8 text-[#267b7d] font-medium">
-        <a href="#" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Sobre nós</a>
-        <a href="#" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Home</a>
-        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Produtos</a>
-        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Rotina</a>
-        <a href="#products-container" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Cuidados</a>
+        <a href="#home" class="hover:text-[#f2663b] text-lg transition-colors duration-200 ">Home</a>
+        <a href="#sobre" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Sobre nós</a>
+        <a href="#kit-destaque" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Destaque</a>
+        <a href="#produtos" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Produtos</a>
+        <a href="#rotina" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Rotina</a>
       </nav>
 
 
@@ -88,11 +92,11 @@ onUnmounted(() => {
         'hidden': !isMobileMenuOpen
       }"
     >
-      <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
-      <a href="#" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
-      <a href="#products-container" class="hover:text-[#f2663b] transition-colors duration-200">Cuidados</a>
+      <a href="#home" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
+      <a href="#sobre" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
+      <a href="#kit-destaque" class="hover:text-[#f2663b] transition-colors duration-200">Destaque</a>
+      <a href="#produtos" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
+      <a href="#rotina" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
     </nav>
 
     <!-- <Cart ref="cartRef" /> -->

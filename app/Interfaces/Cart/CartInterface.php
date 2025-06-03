@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 interface CartInterface
 {
     public function createCart(Request $request): JsonResponse;
+    public function index(): JsonResponse;
     public function updateCart(Request $request, $id): JsonResponse;
     public function deleteCart($id): JsonResponse;
 }

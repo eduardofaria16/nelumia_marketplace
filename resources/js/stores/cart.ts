@@ -5,7 +5,7 @@ import axios from 'axios'
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as {
-      id: number
+      product_id: number
       name: string
       price: number
       quantity: number
@@ -26,8 +26,17 @@ export const useCartStore = defineStore('cart', {
           price: product.price,
           name: product.name,
         })
+        const item = this.items.find((i) => i.product_id === product.id)
+        
+        if (item) {
+          item.quantity+=1
+        } else {
+          this.items.push({ ...product, quantity: 1 })
+        }
+
       } else {
         const item = this.items.find((i) => i.id === product.id)
+    
         if (item) {
           item.quantity+=1
         } else {
@@ -37,26 +46,47 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    async increaseQuantity(id: number) {
+    async increaseQuantity(id: number,quantity: number) {
       const isAuthenticated = usePage().props.auth?.user;
-
+      console.log(id, quantity + 1);
+    
       if (isAuthenticated) {
-        await axios.put(`/cart/${id}`, { $params: { id: id, quantity: this.items.find((i) => i.id === id)?.quantity + 1 } })
+        try {
+          const response = await axios.put(`/cart/${id}`, { id, quantity: quantity + 1 });
+          // Atualiza o item no array local com a nova quantidade
+          const item = this.items.find((i) => i.product_id === id);
+          console.log(item);
+          if (item) {
+            item.quantity = quantity + 1;
+          }
+        } catch (error) {
+          console.error('Erro ao atualizar quantidade:', error);
+        }
       } else {
-        const item = this.items.find((i) => i.id === id)
+        const item = this.items.find((i) => i.id === id);
         if (item) {
-          item.quantity++
-          this.saveToLocalStorage()
+          item.quantity++;
+          this.saveToLocalStorage();
         }
       }
     },
 
-    async decreaseQuantity(id: number) {
+    async decreaseQuantity(id: number,quantity: number) {
       const isAuthenticated = usePage().props.auth?.user;
 
       if (isAuthenticated) {
-        await axios.put(`/cart/${id}`, { $params: { id: id, quantity: this.items.find((i) => i.id === id)?.quantity - 1 } })
-      } else {
+        try {
+          const response = await axios.put(`/cart/${id}`, { id, quantity: quantity + 1 });
+          // Atualiza o item no array local com a nova quantidade
+          const item = this.items.find((i) => i.product_id === id);
+          console.log(item);
+          if (item) {
+            item.quantity = quantity - 1;
+          }
+        } catch (error) {
+          console.error('Erro ao atualizar quantidade:', error);
+        }
+      }else {
         const item = this.items.find((i) => i.id === id)
         if (item && item.quantity > 1) {
           item.quantity--
@@ -70,6 +100,7 @@ export const useCartStore = defineStore('cart', {
 
       if (isAuthenticated) {
         await axios.delete(`/cart/${id}`)
+        this.items = this.items.filter((i) => i.product_id !== id)
       } else {
         this.items = this.items.filter((i) => i.id !== id)
         this.saveToLocalStorage()
@@ -93,6 +124,7 @@ export const useCartStore = defineStore('cart', {
       if (isAuthenticated) {
         await axios.get('/cart').then((response) => {
           this.items = response.data
+          console.log(this.items);
         })
       } else {
         this.loadFromLocalStorage()

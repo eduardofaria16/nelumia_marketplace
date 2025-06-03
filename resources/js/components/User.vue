@@ -33,8 +33,13 @@ const props = defineProps<Props>();
 
 const isDialogOpen = ref(false);
 const isPopoverOpen = ref(false);
-
+const currentName = ref('');
 const isRegister = ref(false);
+const isReset = ref(false);
+
+const resetForm = useForm({
+    email: '',
+});
 
 const form = useForm({
     email: '',
@@ -43,6 +48,7 @@ const form = useForm({
 });
 
 const registerForm = useForm({
+    name: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -55,17 +61,27 @@ const openAuthDialog = () => {
     registerForm.clearErrors();
 };
 
-const openPopover = () => {
+const openPopover = (name: string) => {
     isPopoverOpen.value = true;
+    currentName.value = name;
 };
 
 const closeAuthDialog = () => {
-    isDialogOpen.value = false;
+
+    // Limpa os formulários e erros
     form.reset();
     form.clearErrors();
+
     registerForm.reset();
     registerForm.clearErrors();
+
+    resetForm.reset(); // << ADICIONA ISSO
+    resetForm.clearErrors(); // << ADICIONA ISSO
+
+    // Volta para a tela de login
     isRegister.value = false;
+    isReset.value = false;
+    isDialogOpen.value = false;
 };
 
 const login = () => {
@@ -97,16 +113,18 @@ const logout = () => {
         }
     });
 };
+const sendResetLink = () => {
+    resetForm.post('/forgot-password', {
+        onSuccess: () => {
+            resetForm.reset();
+        },
+        onError: () => {
+            // Erros já estão sendo exibidos
+        }
+    });
+}
 
-const goToProfile = () => {
-    router.visit('/profile');
-    isPopoverOpen.value = false;
-};
 
-const goToSettings = () => {
-    router.visit('/settings');
-    isPopoverOpen.value = false;
-};
 
 // Expõe as funções para o componente pai
 defineExpose({
@@ -124,7 +142,7 @@ defineExpose({
                 </DialogTitle>
             </DialogHeader>
             
-            <form v-if="!isRegister" @submit.prevent="login" class="mt-4 space-y-4">
+            <form v-if="!isRegister && !isReset" @submit.prevent="login" class="mt-4 space-y-4">
                 <div class="space-y-2">
                     <Label for="email">E-mail</Label>
                     <Input 
@@ -171,13 +189,30 @@ defineExpose({
                 </div>
                 
                 <div class="text-center text-sm">
-                    <Link href="/password/reset" class="text-[#267b7d] hover:text-[#f2663b] transition duration-200">
+                    <button
+                        type="button"
+                        @click="isReset = true"
+                        class="text-[#267b7d] hover:text-[#f2663b] transition duration-200"
+                    >
                         Esqueceu sua senha?
-                    </Link>
+                    </button>
                 </div>
             </form>
 
-            <form v-else @submit.prevent="register" class="mt-4 space-y-4">
+            <form v-else-if="!isReset" @submit.prevent="register" class="mt-4 space-y-4">
+                
+                <div class="space-y-2">
+                    <Label for="register-name">Nome</Label>
+                    <Input 
+                        id="register-name" 
+                        v-model="registerForm.name" 
+                        type="text" 
+                        placeholder="Nome" 
+                        required 
+                        autocomplete="name" 
+                    />
+                    <p v-if="registerForm.errors.email" class="text-red-500 text-sm">{{ registerForm.errors.email }}</p>
+                </div>
                 <div class="space-y-2">
                     <Label for="register-email">E-mail</Label>
                     <Input 
@@ -214,14 +249,52 @@ defineExpose({
                     />
                     <p v-if="registerForm.errors.password_confirmation" class="text-red-500 text-sm">{{ registerForm.errors.password_confirmation }}</p>
                 </div>
-                <DialogFooter class="flex flex-col sm:flex-row sm:justify-between gap-4">
+                <div class="space-y-2">
+                    <DialogFooter class="flex flex-col sm:flex-row sm:justify-between gap-4">
                     <Button type="button" variant="outline" class="bg-white text-[#267b7d] hover:text-[#267b7d] transition duration-200" @click="isRegister = false">Voltar</Button>
                     <Button type="submit" :disabled="registerForm.processing">
                         <LoaderCircle v-if="registerForm.processing" class="mr-2 h-4 w-4 animate-spin" />
                         Registrar
                     </Button>
                 </DialogFooter>
+                </div>
+
             </form>
+            <form v-else-if="isReset" @submit.prevent="sendResetLink" class="mt-4 space-y-4">
+                    <div class="space-y-2">
+                        <Label for="reset-email">E-mail</Label>
+                        <Input 
+                            id="reset-email" 
+                            v-model="resetForm.email" 
+                            type="email" 
+                            placeholder="Digite seu e-mail" 
+                            required 
+                            autocomplete="email" 
+                        />
+                        <p v-if="resetForm.errors.email" class="text-red-500 text-sm">{{ resetForm.errors.email }}</p>
+                    </div>
+
+                    <DialogFooter class="flex flex-col sm:flex-row sm:justify-between gap-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            class="bg-white text-[#267b7d] hover:text-[#267b7d] transition duration-200"
+                            @click="isReset = false"
+                        >
+                            Voltar
+                        </Button>
+                        <Button type="submit" :disabled="resetForm.processing">
+                            <LoaderCircle v-if="resetForm.processing" class="mr-2 h-4 w-4 animate-spin" />
+                            Enviar link
+                        </Button>
+                    </DialogFooter>
+
+                    <p v-if="$page.props.flash?.status" class="text-green-600 text-sm text-center">
+                        {{ $page.props.flash.status }}
+                    </p>
+            </form>
+
+            
         </DialogContent>
     </Dialog>
 
@@ -235,10 +308,10 @@ defineExpose({
                 </slot>
             </Button>
         </PopoverTrigger>
-        <PopoverContent class="w-56 p-4 bg-white border-none flex flex-col items-center" align="center" side="bottom" side-offset="8">
+        <PopoverContent class="w-56 p-4 bg-white border-none flex flex-col items-center" align="center" side="bottom">
             <div class="space-y-3 w-full flex flex-col items-center">
                 <div class="text-sm w-full flex flex-col items-center">
-                    <p class="font-medium text-[#267b7d] text-base">{{ userInfo?.name || 'Usuário' }}</p>
+                    <p class="font-medium text-[#267b7d] text-base">{{ currentName || 'Usuário' }}</p>
                 </div>
                 <Button 
                     variant="ghost" 

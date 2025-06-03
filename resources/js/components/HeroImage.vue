@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full px-6 py-10">
+  <div class="w-full px-6 py-10" id="home">
     <img
       src="https://via.placeholder.com/1920x800.png?text=Hero+Image+Desktop"
       alt="Hero Nelumia"
