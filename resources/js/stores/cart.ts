@@ -133,16 +133,22 @@ export const useCartStore = defineStore('cart', {
     
     async finishOrder() {
       const isAuthenticated = usePage().props.auth?.user;
+      console.log(this.items);
+      console.log(this.subtotal);
 
       if (isAuthenticated) {
-        await axios.post('/cart/finish', {
+        const response = await axios.post('/checkout', {
           items: this.items,
           total: this.subtotal,
         })
-
+        window.location.href = response.data.url;
       } else {
-        console.log(this.items);
-      } 
+        const response = await axios.post('/checkout', {
+          items: this.items,
+          total: this.subtotal,
+        })
+        window.location.href = response.data.url;
+      }
     }
   },
 })
