@@ -58,17 +58,22 @@ onUnmounted(() => {
       </button>
 
       <!-- Logo -->
-      <div class="text-3xl font-extrabold tracking-wide text-[#267b7d] select-none">
-        NELUMIA
+      <div class="flex items-center gap-2 text-3xl font-extrabold tracking-wide text-[#267b7d] select-none">
+        <img 
+          src="https://via.placeholder.com/48x48.png?text=Logo" 
+          alt="Logo" 
+          class="w-5 h-5 object-contain"
+        />
+        <a href="#home">NELUMIA</a>
       </div>
 
       <!-- Menu (desktop) -->
       <nav class="hidden lg:flex items-center gap-8 text-[#267b7d] font-medium">
         <a href="#home" class="hover:text-[#f2663b] text-lg transition-colors duration-200 ">Home</a>
-        <a href="#sobre" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Sobre nós</a>
         <a href="#kit-destaque" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Destaque</a>
         <a href="#produtos" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Produtos</a>
-        <a href="#rotina" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Rotina</a>
+        <a href="#sobre" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Sobre nós</a>
+        <a href="#instagram" class="hover:text-[#f2663b] text-lg transition-colors duration-200">Instagram</a>
       </nav>
 
 
@@ -93,10 +98,10 @@ onUnmounted(() => {
       }"
     >
       <a href="#home" class="hover:text-[#f2663b] transition-colors duration-200">Home</a>
-      <a href="#sobre" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
       <a href="#kit-destaque" class="hover:text-[#f2663b] transition-colors duration-200">Destaque</a>
       <a href="#produtos" class="hover:text-[#f2663b] transition-colors duration-200">Produtos</a>
-      <a href="#rotina" class="hover:text-[#f2663b] transition-colors duration-200">Rotina</a>
+      <a href="#sobre" class="hover:text-[#f2663b] transition-colors duration-200">Sobre nós</a>
+      <a href="#instagram" class="hover:text-[#f2663b] transition-colors duration-200">Instagram</a>
     </nav>
 
     <!-- <Cart ref="cartRef" /> -->

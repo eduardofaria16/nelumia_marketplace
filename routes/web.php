@@ -13,6 +13,10 @@ Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/migrate', [CartController::class, 'migrate'])->name('cart.migrate');
+
+
 
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');

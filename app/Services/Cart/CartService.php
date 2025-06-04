@@ -99,4 +99,37 @@ class CartService implements CartInterface
         
         return response()->json(['message' => 'Produto removido do carrinho']);
     }
+
+    public function addCart(Request $request): JsonResponse
+    {
+        $user = auth()->user();
+        $cart = Cart::where('user_id', $user->id)->first();
+
+        if(!$cart){
+            $cart = $this->cartRepository->createCart($request->all());
+        }
+
+        return response()->json(['message' => 'Carrinho criado com sucesso']);
+    }
+
+    public function migrateCart() : JsonReponse {
+        
+        // $user = auth()->user(Request $request);
+        dd($request);
+
+        foreach ($request->items as $item) {
+            $productId = $item['id'];
+            $quantity = $item['quantity'];
+            $price = $item['price']
+    
+            // Adiciona ou atualiza o item no carrinho do banco
+            $user->cart()->updateOrCreate(
+                ['product_id' => $productId],
+                ['quantity' => DB::raw("quantity + $quantity")]
+            );
+        }
+    
+        return response()->json(['message' => 'Carrinho migrado com sucesso.']);
+        
+    }
 }

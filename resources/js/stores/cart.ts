@@ -17,6 +17,27 @@ export const useCartStore = defineStore('cart', {
     subtotal: (state) => state.items.reduce((acc, item) => acc + item.price * item.quantity, 0),
   },
   actions: {
+
+    async addCart() {
+      const isAuthenticated = usePage().props.auth?.user;
+
+      if (isAuthenticated) {
+        await axios.post('/cart/add')
+      } 
+    },
+
+    async migrateLocalCart(){
+      const guestCart = JSON.parse(localStorage.getItem('cart'));
+      if (guestCart && guestCart.length > 0) {
+          try {
+              await axios.post('/cart/migrate', { items: guestCart });
+              localStorage.removeItem('cart');
+          } catch (error) {
+              console.error('Erro ao migrar o carrinho:', error);
+          }
+      }
+    },
+
     async addToCart(product: { id: number; name: string; price: number; image: string }) {
       const isAuthenticated = usePage().props.auth?.user;
 
@@ -133,8 +154,7 @@ export const useCartStore = defineStore('cart', {
     
     async finishOrder() {
       const isAuthenticated = usePage().props.auth?.user;
-      console.log(this.items);
-      console.log(this.subtotal);
+
 
       if (isAuthenticated) {
         const response = await axios.post('/checkout', {

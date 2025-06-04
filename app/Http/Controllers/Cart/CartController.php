@@ -36,4 +36,14 @@ class CartController extends Controller
     {
         return $this->cartService->deleteCart($id);
     }
+
+    public function add(Request $request) : JsonResponse 
+    {
+        return $this->cartService->addCart($request);
+    }
+
+    public function migrate(Request $request) : JsonResponse 
+    {
+        return $this->cartService->migrateCart($request);
+    }
 }

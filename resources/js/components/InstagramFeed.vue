@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full py-12 bg-white">
+  <section class="w-full py-12 bg-white" id="instagram">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-2xl md:text-3xl font-bold text-[#267b7d] mb-6 text-center">Siga a Nelumia no Instagram</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4">

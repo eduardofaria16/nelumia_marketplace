@@ -11,4 +11,6 @@ interface CartInterface
     public function index(): JsonResponse;
     public function updateCart(Request $request, $id): JsonResponse;
     public function deleteCart($id): JsonResponse;
+    public function addCart(Request $request): JsonResponse;
+    public function migrateCart(Request $request) : JsonReponse;
 }

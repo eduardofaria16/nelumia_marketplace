@@ -19,6 +19,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useCartStore } from '@/stores/cart';
+
 
 // Props para receber informações do usuário
 interface Props {
@@ -36,6 +38,7 @@ const isPopoverOpen = ref(false);
 const currentName = ref('');
 const isRegister = ref(false);
 const isReset = ref(false);
+const cartStore = useCartStore();
 
 const resetForm = useForm({
     email: '',
@@ -85,9 +88,13 @@ const closeAuthDialog = () => {
 };
 
 const login = () => {
+
     form.post('/login', {
         onSuccess: () => {
+            cartStore.migrateLocalCart();
             closeAuthDialog();
+            cartStore.getCart();
+            
         },
         onError: () => {
             // Os erros serão automaticamente mostrados no formulário
@@ -99,6 +106,7 @@ const register = () => {
     registerForm.post('/register', {
         onSuccess: () => {
             closeAuthDialog();
+            cartStore.addCart();
         },
         onError: () => {
             // Os erros serão automaticamente mostrados no formulário
@@ -199,9 +207,9 @@ defineExpose({
                 </div>
             </form>
 
-            <form v-else-if="!isReset" @submit.prevent="register" class="mt-4 space-y-4">
-                
-                <div class="space-y-2">
+            <form v-else-if="!isReset" @submit.prevent="register" class="mt-4 space-y-6">
+            <div class="space-y-4">   
+                <div class="space-y-1">
                     <Label for="register-name">Nome</Label>
                     <Input 
                         id="register-name" 
@@ -211,9 +219,10 @@ defineExpose({
                         required 
                         autocomplete="name" 
                     />
-                    <p v-if="registerForm.errors.email" class="text-red-500 text-sm">{{ registerForm.errors.email }}</p>
+                    <p v-if="registerForm.errors.name" class="text-red-500 text-sm">{{ registerForm.errors.name }}</p>
                 </div>
-                <div class="space-y-2">
+
+                <div class="space-y-1">
                     <Label for="register-email">E-mail</Label>
                     <Input 
                         id="register-email" 
@@ -225,7 +234,8 @@ defineExpose({
                     />
                     <p v-if="registerForm.errors.email" class="text-red-500 text-sm">{{ registerForm.errors.email }}</p>
                 </div>
-                <div class="space-y-2">
+
+                <div class="space-y-1">
                     <Label for="register-password">Senha</Label>
                     <Input 
                         id="register-password" 
@@ -237,7 +247,8 @@ defineExpose({
                     />
                     <p v-if="registerForm.errors.password" class="text-red-500 text-sm">{{ registerForm.errors.password }}</p>
                 </div>
-                <div class="space-y-2">
+
+                <div class="space-y-1">
                     <Label for="register-password-confirm">Confirmar Senha</Label>
                     <Input 
                         id="register-password-confirm" 
@@ -249,17 +260,19 @@ defineExpose({
                     />
                     <p v-if="registerForm.errors.password_confirmation" class="text-red-500 text-sm">{{ registerForm.errors.password_confirmation }}</p>
                 </div>
-                <div class="space-y-2">
-                    <DialogFooter class="flex flex-col sm:flex-row sm:justify-between gap-4">
-                    <Button type="button" variant="outline" class="bg-white text-[#267b7d] hover:text-[#267b7d] transition duration-200" @click="isRegister = false">Voltar</Button>
-                    <Button type="submit" :disabled="registerForm.processing">
-                        <LoaderCircle v-if="registerForm.processing" class="mr-2 h-4 w-4 animate-spin" />
-                        Registrar
-                    </Button>
-                </DialogFooter>
-                </div>
+            </div>
 
-            </form>
+            <DialogFooter class="flex flex-col sm:flex-row sm:justify-between gap-4">
+                <Button type="button" variant="outline" class="bg-white text-[#267b7d] hover:text-[#267b7d] transition duration-200" @click="isRegister = false">
+                    Voltar
+                </Button>
+                <Button type="submit" :disabled="registerForm.processing">
+                    <LoaderCircle v-if="registerForm.processing" class="mr-2 h-4 w-4 animate-spin" />
+                    Registrar
+                </Button>
+            </DialogFooter>
+        </form>
+
             <form v-else-if="isReset" @submit.prevent="sendResetLink" class="mt-4 space-y-4">
                     <div class="space-y-2">
                         <Label for="reset-email">E-mail</Label>
